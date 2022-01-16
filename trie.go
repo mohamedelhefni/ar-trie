@@ -98,16 +98,8 @@ func (t *araTrie) walk(ch *araTrie) {
 		ch.walk(child)
 	}
 
-	//for r, child := range t.children {
-
-	//fmt.Println(child.children)
-	//child.walk(key + string(r))
-
-	//}
-
 }
 
-//keys := make([]interface{}, 5)
 func (t *araTrie) Keys(key string) {
 	
 	node := t
@@ -126,12 +118,6 @@ func main() {
 	tr.Insert("momen")
 	tr.Insert("mohsen")
   tr.Keys("mo")
-
-  // bench 
-/*  for i := 0 ; i < 10_000_000; i++ {*/
-    /*tr.Insert("رقم" + strconv.Itoa(i))*/
-  /*}*/
-
  
   tr.Insert("محمد")
   tr.Insert("محمود")
