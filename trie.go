@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 type Trie interface {
 	Get(key string) interface{}
 	Put(key string, value interface{}) bool
@@ -82,67 +78,41 @@ func (t *araTrie) Find(key string) bool {
 	return true
 }
 
+var wordList = make([]string, 5)
 
-func (t *araTrie) walk(ch *araTrie) {
-
+func dfs(ch *araTrie, word string) {
 	for r, child := range ch.children {
-
 		if child.isWord {
-
-			fmt.Println(" ", string(r), child.isWord)
-		} else {
-
-			fmt.Println(string(r), child.isWord)
+			wordList = append(wordList, word+string(r))
 		}
-
-		ch.walk(child)
+		dfs(child, word+string(r))
 	}
-
-	//for r, child := range t.children {
-
-	//fmt.Println(child.children)
-	//child.walk(key + string(r))
-
-	//}
 
 }
 
-//keys := make([]interface{}, 5)
-func (t *araTrie) Keys(key string) {
-	
+func (t *araTrie) Keys(key string) []string {
+	wordList = nil
 	node := t
 	for _, r := range key {
 		node = node.children[r]
 	}
-	t.walk(node)
+	dfs(node, key)
+	return wordList
 }
 
 func main() {
 	tr := InitTrie()
-	tr.Insert("hello")
-	tr.Insert("help")
 
 	tr.Insert("mohamed")
+	tr.Insert("mohmed")
+	tr.Insert("modaser")
+	tr.Insert("monzer")
 	tr.Insert("momen")
 	tr.Insert("mohsen")
-  tr.Keys("mo")
+	tr.Keys("mo")
 
-  // bench 
-/*  for i := 0 ; i < 10_000_000; i++ {*/
-    /*tr.Insert("رقم" + strconv.Itoa(i))*/
-  /*}*/
-
- 
-  tr.Insert("محمد")
-  tr.Insert("محمود")
-  tr.Insert("محمي")
-  tr.Keys("مح")
-  tr.walk(tr)
+	tr.Insert("محمد")
+	tr.Insert("محمود")
+	tr.Insert("محمي")
+	tr.Keys("مح")
 }
-
-
-
-
-
-
-

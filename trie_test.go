@@ -6,7 +6,6 @@ import (
 )
 
 var t = InitTrie()
-var tr = InitTrie()
 
 func BenchmarkInsert(b *testing.B){
 
@@ -25,15 +24,21 @@ func BenchmarkSearch( b *testing.B){
 
 func BenchmarkPut(b *testing.B){
   for i := 0 ; i < b.N; i++ {
-    val := "رقم" + strconv.Itoa(i)
-    tr.Put(val, val)
+    val := "قيمة" + strconv.Itoa(i)
+    t.Put(val, val)
   }
 }
 
 
 func BenchmarkGet(b *testing.B){
   for i := 0 ; i < b.N; i++ {
-    val := "رقم" + strconv.Itoa(i)
-    tr.Get(val)
+    val := "قيمة" + strconv.Itoa(i)
+    t.Get(val)
   }
 }
+
+
+func BenchmarkKeys(b *testing.B){
+  t.Keys("ر")
+}
+
