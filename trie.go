@@ -9,14 +9,19 @@ type Trie interface {
 	Put(key string, value interface{}) bool
 	Insert(key string)
 	Find(key string) bool
+	Delete(key string) bool
 	Keys(key string) interface{}
-	walk(key string)
 }
 
 type araTrie struct {
 	value    interface{}
 	children map[rune]*araTrie
 	isWord   bool
+}
+
+type nodeRune struct {
+	node *araTrie
+	r    rune
 }
 
 func InitTrie() *araTrie {
@@ -82,6 +87,40 @@ func (t *araTrie) Find(key string) bool {
 	return true
 }
 
+func (t *araTrie) Delete(key string) bool {
+	path := make([]nodeRune, len(key))
+	node := t
+	for i, r := range key {
+		path[i] = nodeRune{r: r, node: node}
+		node = node.children[r]
+		if node == nil {
+			return false // node doesn't exist
+		}
+	}
+	node.value = nil
+
+	if node.isLeaf() {
+		for i := len(key) - 1; i > 0; i-- {
+			parent := path[i].node
+			r := path[i].r
+
+			delete(parent.children, r)
+
+			if !parent.isLeaf() {
+				break
+			}
+
+			parent.children = nil
+
+			if parent.value != nil {
+				break
+			}
+
+		}
+	}
+
+	return true
+}
 
 func (t *araTrie) walk(ch *araTrie) {
 
@@ -101,12 +140,16 @@ func (t *araTrie) walk(ch *araTrie) {
 }
 
 func (t *araTrie) Keys(key string) {
-	
+
 	node := t
 	for _, r := range key {
 		node = node.children[r]
 	}
 	t.walk(node)
+}
+
+func (t *araTrie) isLeaf() bool {
+	return len(t.children) == 0
 }
 
 func main() {
@@ -117,18 +160,12 @@ func main() {
 	tr.Insert("mohamed")
 	tr.Insert("momen")
 	tr.Insert("mohsen")
-  tr.Keys("mo")
- 
-  tr.Insert("محمد")
-  tr.Insert("محمود")
-  tr.Insert("محمي")
-  tr.Keys("مح")
-  tr.walk(tr)
+
+	fmt.Println(tr.Find("mohamed"))
+	tr.Delete("mohamed")
+	fmt.Println(tr.Find("mohamed"))
+
+	tr.Insert("محمد")
+	tr.Insert("محمود")
+	tr.Insert("محمي")
 }
-
-
-
-
-
-
-
