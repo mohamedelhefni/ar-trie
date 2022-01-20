@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# ar-trie
-=======
-=======
->>>>>>> dddb29e878527525d344ac06ed8e6c1c01db7701
 # Ar Trie
 
 
@@ -10,8 +5,11 @@
 -  **InitTrie**  initialize the trie
 -  **Insert**  Insert single key in your tree 
 -  **Find** check if your key is in the tree
-- **Put** map a key to a value 
-- **Get** get value for your key 
+-  **Put** map a key to a value 
+-  **Get** get value for your key 
+-  **Delete** Delete key from your trie
+-  **Search** Search on trie values with your prefix key 
+
 
 ### Trie Benchmark 
 
@@ -48,30 +46,29 @@ ok      aratrie 11.603s
 ```go 
 func main() {
 
+
 	tr := InitTrie()
+
 	tr.Insert("mohamed")
 	tr.Insert("mohmed")
 	tr.Insert("modaser")
 	tr.Insert("monzer")
 	tr.Insert("momen")
 	tr.Insert("mohsen")
-	fmt.Println(tr.Keys("mo")) // [mohamed  mohmed mohsen modaser monzer momen]
+  tr.Keys("mo")
 
 	tr.Insert("محمد")
 	tr.Insert("محمود")
 	tr.Insert("محمي")
-	fmt.Println(tr.Keys("مح")) // [محمود محمي محمد]
+	tr.Keys("مح")
+
+	tr.Put("hello", "world")           
+	tr.Put("here", "is a trie search") 
+  tr.Search("he")  // ["world", "is a trie search]
+
+  tr.Find("mohamed") // true
+	tr.Delete("mohamed")
+  tr.Find("mohamed") // false
 }
 
 ```
-=======
-BenchmarkInsert-12    	4684521	      235.4 ns/op	     63 B/op	      2 allocs/op
-BenchmarkSearch-12    	8535787	      143.9 ns/op	      7 B/op	      0 allocs/op
-BenchmarkPut-12       	4150489	      302.8 ns/op	     93 B/op	      3 allocs/op
-BenchmarkGet-12       	8219924	      147.3 ns/op	      7 B/op	      0 allocs/op
-PASS
-ok  	aratrie	6.885s
-```
-
-
->>>>>>> dddb29e878527525d344ac06ed8e6c1c01db7701
