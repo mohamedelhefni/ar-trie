@@ -84,8 +84,6 @@ func (t *araTrie) Find(key string) bool {
 	return true
 }
 
-var wordList = make([]string, 5)
-
 func (t *araTrie) Delete(key string) bool {
 	path := make([]nodeRune, len(key))
 	node := t
@@ -121,12 +119,12 @@ func (t *araTrie) Delete(key string) bool {
 	return true
 }
 
-func dfs(ch *araTrie, word string) {
+func dfs(ch *araTrie, word string, wordsList *[]string) {
 	for r, child := range ch.children {
 		if child.isWord {
-			wordList = append(wordList, word+string(r))
+			*wordsList = append(*wordsList, word+string(r))
 		}
-		dfs(child, word+string(r))
+		dfs(child, word+string(r), wordsList)
 	}
 
 }
@@ -135,19 +133,19 @@ func (t *araTrie) Keys(key string) []string {
 	if !t.Find(key) {
 		return nil
 	}
-	wordList = nil
+	wordsList := make([]string, 0)
 	node := t
 	for _, r := range key {
 		node = node.children[r]
 	}
 
 	if node.isWord {
-		wordList = append(wordList, key)
+		wordsList = append(wordsList, key)
 	}
 	if node != nil {
-		dfs(node, key)
+		dfs(node, key, &wordsList)
 	}
-	return wordList
+	return wordsList
 }
 
 func (t *araTrie) Search(key string) []interface{} {
