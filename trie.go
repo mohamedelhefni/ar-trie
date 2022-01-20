@@ -85,6 +85,7 @@ func (t *araTrie) Find(key string) bool {
 }
 
 var wordList = make([]string, 5)
+
 func (t *araTrie) Delete(key string) bool {
 	path := make([]nodeRune, len(key))
 	node := t
@@ -131,15 +132,18 @@ func dfs(ch *araTrie, word string) {
 }
 
 func (t *araTrie) Keys(key string) []string {
+	if !t.Find(key) {
+		return nil
+	}
 	wordList = nil
 	node := t
 	for _, r := range key {
 		node = node.children[r]
 	}
 
-  if node.isWord {
-    wordList = append(wordList, key)
-  }
+	if node.isWord {
+		wordList = append(wordList, key)
+	}
 	if node != nil {
 		dfs(node, key)
 	}
@@ -173,19 +177,19 @@ func main() {
 	tr.Insert("monzer")
 	tr.Insert("momen")
 	tr.Insert("mohsen")
-  tr.Keys("mo")
+	tr.Keys("mo")
 
 	tr.Insert("محمد")
 	tr.Insert("محمود")
 	tr.Insert("محمي")
 	tr.Keys("مح")
 
-	tr.Put("hello", "world")           
-	tr.Put("here", "is a trie search") 
-  tr.Search("he")  // ["world", "is a trie search]
+	tr.Put("hello", "world")
+	tr.Put("here", "is a trie search")
+	tr.Search("he") // ["world", "is a trie search]
 
-  tr.Find("mohamed") // true
+	tr.Find("mohamed") // true
 	tr.Delete("mohamed")
-  tr.Find("mohamed") // false
+	tr.Find("mohamed") // false
 
 }
