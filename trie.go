@@ -5,6 +5,7 @@ type Trie interface {
 	Put(key string, value interface{}) bool
 	Insert(key string)
 	Find(key string) bool
+	Search(key string) []interface{}
 	Keys(key string) interface{}
 	walk(key string)
 }
@@ -96,8 +97,28 @@ func (t *araTrie) Keys(key string) []string {
 	for _, r := range key {
 		node = node.children[r]
 	}
-	dfs(node, key)
+
+  if node.isWord {
+    wordList = append(wordList, key)
+  }
+	if node != nil {
+		dfs(node, key)
+	}
 	return wordList
+}
+
+func (t *araTrie) Search(key string) []interface{} {
+	results := make([]interface{}, 1)
+	keys := t.Keys(key)
+	if len(keys) > 0 {
+		for _, key := range keys {
+			result := t.Get(key)
+			if len(results) > 0 {
+				results = append(results, result)
+			}
+		}
+	}
+	return results[1:]
 }
 
 func main() {
@@ -109,10 +130,14 @@ func main() {
 	tr.Insert("monzer")
 	tr.Insert("momen")
 	tr.Insert("mohsen")
-	tr.Keys("mo")
+  tr.Keys("mo")
 
 	tr.Insert("محمد")
 	tr.Insert("محمود")
 	tr.Insert("محمي")
 	tr.Keys("مح")
+
+	tr.Put("hello", "world")           
+	tr.Put("here", "is a trie search") 
+  tr.Search("he")  // ["world", "is a trie search]
 }
