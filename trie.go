@@ -6,14 +6,19 @@ type Trie interface {
 	Insert(key string)
 	Find(key string) bool
 	Search(key string) []interface{}
+	Delete(key string) bool
 	Keys(key string) interface{}
-	walk(key string)
 }
 
 type araTrie struct {
 	value    interface{}
 	children map[rune]*araTrie
 	isWord   bool
+}
+
+type nodeRune struct {
+	node *araTrie
+	r    rune
 }
 
 func InitTrie() *araTrie {
@@ -80,6 +85,40 @@ func (t *araTrie) Find(key string) bool {
 }
 
 var wordList = make([]string, 5)
+func (t *araTrie) Delete(key string) bool {
+	path := make([]nodeRune, len(key))
+	node := t
+	for i, r := range key {
+		path[i] = nodeRune{r: r, node: node}
+		node = node.children[r]
+		if node == nil {
+			return false // node doesn't exist
+		}
+	}
+	node.value = nil
+
+	if node.isLeaf() {
+		for i := len(key) - 1; i > 0; i-- {
+			parent := path[i].node
+			r := path[i].r
+
+			delete(parent.children, r)
+
+			if !parent.isLeaf() {
+				break
+			}
+
+			parent.children = nil
+
+			if parent.value != nil {
+				break
+			}
+
+		}
+	}
+
+	return true
+}
 
 func dfs(ch *araTrie, word string) {
 	for r, child := range ch.children {
@@ -121,6 +160,10 @@ func (t *araTrie) Search(key string) []interface{} {
 	return results[1:]
 }
 
+func (t *araTrie) isLeaf() bool {
+	return len(t.children) == 0
+}
+
 func main() {
 	tr := InitTrie()
 
@@ -140,4 +183,9 @@ func main() {
 	tr.Put("hello", "world")           
 	tr.Put("here", "is a trie search") 
   tr.Search("he")  // ["world", "is a trie search]
+
+  tr.Find("mohamed") // true
+	tr.Delete("mohamed")
+  tr.Find("mohamed") // false
+
 }

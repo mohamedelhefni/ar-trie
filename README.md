@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 # ar-trie
 =======
+=======
+>>>>>>> dddb29e878527525d344ac06ed8e6c1c01db7701
 # Ar Trie
 
 
@@ -17,6 +20,7 @@ goos: linux
 goarch: amd64
 pkg: aratrie
 cpu: AMD Ryzen 5 PRO 4650G with Radeon Graphics
+<<<<<<< HEAD
 BenchmarkInsert-12    	4616820	      238.6 ns/op	     63 B/op	      2 allocs/op
 BenchmarkSearch-12    	8523724	      140.3 ns/op	      7 B/op	      0 allocs/op
 BenchmarkPut-12       	4158210	      303.4 ns/op	     93 B/op	      3 allocs/op
@@ -60,3 +64,14 @@ func main() {
 }
 
 ```
+=======
+BenchmarkInsert-12    	4684521	      235.4 ns/op	     63 B/op	      2 allocs/op
+BenchmarkSearch-12    	8535787	      143.9 ns/op	      7 B/op	      0 allocs/op
+BenchmarkPut-12       	4150489	      302.8 ns/op	     93 B/op	      3 allocs/op
+BenchmarkGet-12       	8219924	      147.3 ns/op	      7 B/op	      0 allocs/op
+PASS
+ok  	aratrie	6.885s
+```
+
+
+>>>>>>> dddb29e878527525d344ac06ed8e6c1c01db7701
