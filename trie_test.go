@@ -1,44 +1,75 @@
 package main
 
 import (
-	"strconv"
+	"math/rand"
 	"testing"
 )
 
-var t = InitTrie()
+var stringKeys [1000]string // random string keys
+const bytesPerKey = 30
 
-func BenchmarkInsert(b *testing.B){
-
-  for i := 0 ; i < b.N ; i++ {
-    t.Insert("رقم" + strconv.Itoa(i))
-  }
+func init() {
+	// string keys
+	for i := 0; i < len(stringKeys); i++ {
+		key := make([]byte, bytesPerKey)
+		if _, err := rand.Read(key); err != nil {
+			panic("error generating random byte slice")
+		}
+		stringKeys[i] = string(key)
+	}
 }
 
+func BenchmarkInsert(b *testing.B) {
 
-func BenchmarkSearch( b *testing.B){
-  for i := 0 ; i < b.N; i++ {
-    t.Find("رقم" + strconv.Itoa(i))
-  }
+	trie := InitTrie()
+	b.ResetTimer()
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		trie.Insert(stringKeys[i%len(stringKeys)])
+	}
 }
 
-
-func BenchmarkPut(b *testing.B){
-  for i := 0 ; i < b.N; i++ {
-    val := "قيمة" + strconv.Itoa(i)
-    t.Put(val, val)
-  }
+func BenchmarkFind(b *testing.B) {
+	trie := InitTrie()
+	b.ResetTimer()
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		trie.Find(stringKeys[i%len(stringKeys)])
+	}
 }
 
-
-func BenchmarkGet(b *testing.B){
-  for i := 0 ; i < b.N; i++ {
-    val := "قيمة" + strconv.Itoa(i)
-    t.Get(val)
-  }
+func BenchmarkPut(b *testing.B) {
+	trie := InitTrie()
+	b.ResetTimer()
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		trie.Put(stringKeys[i%len(stringKeys)], i)
+	}
 }
 
-
-func BenchmarkKeys(b *testing.B){
-  t.Keys("ر")
+func BenchmarkGet(b *testing.B) {
+	trie := InitTrie()
+	b.ResetTimer()
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		trie.Get(stringKeys[i%len(stringKeys)])
+	}
 }
 
+func BenchmarkKeys(b *testing.B) {
+	trie := InitTrie()
+	b.ResetTimer()
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		trie.Keys(stringKeys[i%len(stringKeys)][:3])
+	}
+}
+
+func BenchmarkSearch(b *testing.B) {
+	trie := InitTrie()
+	b.ResetTimer()
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		trie.Search(stringKeys[i%len(stringKeys)][:3])
+	}
+}

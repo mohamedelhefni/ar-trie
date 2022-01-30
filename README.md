@@ -14,33 +14,15 @@
 ### Trie Benchmark 
 
 ```
-goos: linux
-goarch: amd64
-pkg: aratrie
-cpu: AMD Ryzen 5 PRO 4650G with Radeon Graphics
-<<<<<<< HEAD
-BenchmarkInsert-12    	4616820	      238.6 ns/op	     63 B/op	      2 allocs/op
-BenchmarkSearch-12    	8523724	      140.3 ns/op	      7 B/op	      0 allocs/op
-BenchmarkPut-12       	4158210	      303.4 ns/op	     93 B/op	      3 allocs/op
-BenchmarkGet-12       	7823724	      152.0 ns/op	      7 B/op	      0 allocs/op
-BenchmarkKeys-12      	1000000000	        0.5880 ns/op	      0 B/op	      0 allocs/op
-PASS
-ok  	aratrie	28.368s
-```
+BenchmarkInsert-12    	2260291	      523.4 ns/op	      2 B/op	      0 allocs/op
+BenchmarkFind-12      	152889574	        7.304 ns/op	      0 B/op	      0 allocs/op
+BenchmarkPut-12       	2127642	      561.2 ns/op	     10 B/op	      1 allocs/op
+BenchmarkGet-12       	169333138	        7.154 ns/op	      0 B/op	      0 allocs/op
+BenchmarkKeys-12      	117835408	        9.887 ns/op	      0 B/op	      0 allocs/op
+BenchmarkSearch-12    	28626381	      102.2 ns/op	     16 B/op	      1 allocs/op
 
 ```
-goos: linux
-goarch: amd64
-pkg: aratrie
-cpu: Intel(R) Xeon(R) CPU @ 2.20GHz
-BenchmarkInsert-2        2882205               364.1 ns/op            34 B/op          1 allocs/op
-BenchmarkSearch-2        4970304               254.2 ns/op             7 B/op          0 allocs/op
-BenchmarkPut-2           2340908               504.7 ns/op            80 B/op          3 allocs/op
-BenchmarkGet-2           5024829               254.0 ns/op             7 B/op          0 allocs/op
-PASS
-ok      aratrie 11.603s
 
-```
 
 ## Examples 
 ```go 
@@ -64,7 +46,7 @@ func main() {
 
 	tr.Put("hello", "world")           
 	tr.Put("here", "is a trie search") 
-  tr.Search("he")  // ["world", "is a trie search]
+  tr.Search("he")  // ["world", "is a trie search"]
 
   tr.Find("mohamed") // true
 	tr.Delete("mohamed")
