@@ -1,14 +1,11 @@
 package main
 
-import (
-	"fmt"
-)
-
 type Trie interface {
 	Get(key string) interface{}
 	Put(key string, value interface{}) bool
 	Insert(key string)
 	Find(key string) bool
+	Search(key string) []interface{}
 	Delete(key string) bool
 	Keys(key string) interface{}
 }
@@ -122,30 +119,47 @@ func (t *araTrie) Delete(key string) bool {
 	return true
 }
 
-func (t *araTrie) walk(ch *araTrie) {
-
+func dfs(ch *araTrie, word string, wordsList *[]string) {
 	for r, child := range ch.children {
-
 		if child.isWord {
-
-			fmt.Println(" ", string(r), child.isWord)
-		} else {
-
-			fmt.Println(string(r), child.isWord)
+			*wordsList = append(*wordsList, word+string(r))
 		}
-
-		ch.walk(child)
+		dfs(child, word+string(r), wordsList)
 	}
 
 }
 
-func (t *araTrie) Keys(key string) {
-
+func (t *araTrie) Keys(key string) []string {
+	if !t.Find(key) {
+		return nil
+	}
+	wordsList := make([]string, 0)
 	node := t
 	for _, r := range key {
 		node = node.children[r]
 	}
-	t.walk(node)
+
+	if node.isWord {
+		wordsList = append(wordsList, key)
+	}
+	if node != nil {
+		dfs(node, key, &wordsList)
+	}
+	return wordsList
+}
+
+func (t *araTrie) Search(key string) []interface{} {
+	results := make([]interface{}, 1)
+	keys := t.Keys(key)
+	if len(keys) > 0 {
+		for _, key := range keys {
+			result := t.Get(key)
+			if len(results) > 0 {
+				results = append(results, result)
+			}
+		}
+	}
+	return results[1:]
 }
 
 func (t *araTrie) isLeaf() bool {
@@ -154,18 +168,26 @@ func (t *araTrie) isLeaf() bool {
 
 func main() {
 	tr := InitTrie()
-	tr.Insert("hello")
-	tr.Insert("help")
 
 	tr.Insert("mohamed")
+	tr.Insert("mohmed")
+	tr.Insert("modaser")
+	tr.Insert("monzer")
 	tr.Insert("momen")
 	tr.Insert("mohsen")
-
-	fmt.Println(tr.Find("mohamed"))
-	tr.Delete("mohamed")
-	fmt.Println(tr.Find("mohamed"))
+	tr.Keys("mo")
 
 	tr.Insert("محمد")
 	tr.Insert("محمود")
 	tr.Insert("محمي")
+	tr.Keys("مح")
+
+	tr.Put("hello", "world")
+	tr.Put("here", "is a trie search")
+	tr.Search("he") // ["world", "is a trie search]
+
+	tr.Find("mohamed") // true
+	tr.Delete("mohamed")
+	tr.Find("mohamed") // false
+
 }
