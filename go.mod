@@ -1,3 +1,3 @@
-module aratrie
+module artrie
 
 go 1.17

@@ -1,4 +1,4 @@
-package main
+package artrie
 
 type Trie interface {
 	Get(key string) interface{}
@@ -85,8 +85,10 @@ func (t *araTrie) Find(key string) bool {
 }
 
 func (t *araTrie) Delete(key string) bool {
+
 	path := make([]nodeRune, len(key))
 	node := t
+
 	for i, r := range key {
 		path[i] = nodeRune{r: r, node: node}
 		node = node.children[r]
@@ -94,10 +96,17 @@ func (t *araTrie) Delete(key string) bool {
 			return false // node doesn't exist
 		}
 	}
+
 	node.value = nil
 
 	if node.isLeaf() {
+
 		for i := len(key) - 1; i > 0; i-- {
+
+			if path[i].node == nil {
+				continue
+			}
+
 			parent := path[i].node
 			r := path[i].r
 
@@ -166,28 +175,3 @@ func (t *araTrie) isLeaf() bool {
 	return len(t.children) == 0
 }
 
-func main() {
-	tr := InitTrie()
-
-	tr.Insert("mohamed")
-	tr.Insert("mohmed")
-	tr.Insert("modaser")
-	tr.Insert("monzer")
-	tr.Insert("momen")
-	tr.Insert("mohsen")
-	tr.Keys("mo")
-
-	tr.Insert("محمد")
-	tr.Insert("محمود")
-	tr.Insert("محمي")
-	tr.Keys("مح")
-
-	tr.Put("hello", "world")
-	tr.Put("here", "is a trie search")
-	tr.Search("he") // ["world", "is a trie search]
-
-	tr.Find("mohamed") // true
-	tr.Delete("mohamed")
-	tr.Find("mohamed") // false
-
-}

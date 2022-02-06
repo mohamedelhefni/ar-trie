@@ -23,12 +23,9 @@ BenchmarkSearch-12    	28626381	      102.2 ns/op	     16 B/op	      1 allocs/op
 
 ```
 
+## Examples
 
-## Examples 
-```go 
-func main() {
-
-
+```go
 	tr := InitTrie()
 
 	tr.Insert("mohamed")
@@ -37,20 +34,23 @@ func main() {
 	tr.Insert("monzer")
 	tr.Insert("momen")
 	tr.Insert("mohsen")
-  tr.Keys("mo")
+  tr.Keys("mo") // [mohamed mohmed mohsen modaser monzer momen]
 
 	tr.Insert("محمد")
 	tr.Insert("محمود")
-	tr.Insert("محمي")
-	tr.Keys("مح")
+	tr.Keys("مح") // [محمد محمود]
 
-	tr.Put("hello", "world")           
-	tr.Put("here", "is a trie search") 
-  tr.Search("he")  // ["world", "is a trie search"]
+	tr.Put("hello", "world")
+	tr.Put("here", "is a trie search")
 
-  tr.Find("mohamed") // true
+	tr.Search("he") // ["world", "is a trie search"]
+
+	tr.Find("mohamed") // true
 	tr.Delete("mohamed")
-  tr.Find("mohamed") // false
-}
+	tr.Find("mohamed") // false
+
+	tr.Find("محمد") // true
+	tr.Delete("محمد")
+	tr.Find("محمد") // false
 
 ```
